@@ -4,7 +4,7 @@ from aiohttp import web
 from aiohttp_swagger import *
 
 
-async def home(request):
+async def home(request: web.Request) -> web.Response:
     """
     ---
     description: This end-point allow to test that service is up.
@@ -18,7 +18,10 @@ async def home(request):
         "405":
             description: invalid HTTP Method
     """
-    return web.Response(text=json.dumps({'response': 'nicecock'}), status=200)
+    return web.Response(
+        text=json.dumps({'response': 'nicecock'}), 
+        status=200
+    )
 
 app = web.Application()
 app.router.add_get('/', home)
