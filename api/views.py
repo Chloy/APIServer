@@ -1,8 +1,11 @@
-from aiohttp.web import Request, Response
+from aiohttp.web import Request, Response, RouteTableDef
 import json
 
 
-def home(request: Request) -> Response:
+routes = RouteTableDef()
+
+@routes.get('/')
+async def get_home(request: Request) -> Response:
     """
     ---
     description: Just test
