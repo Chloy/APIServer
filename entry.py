@@ -1,4 +1,3 @@
-from statistics import mode
 from aiohttp import web
 from aiohttp_security import setup, SessionIdentityPolicy
 from api import create_app
