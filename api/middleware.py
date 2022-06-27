@@ -1,5 +1,10 @@
 from __future__ import annotations
 from aiohttp import web
+from aiohttp_jwt import JWTMiddleware
+import jwt
+
+
+secret = 'secret'
 
 
 async def handle_404(request: web.Request) -> web.Response:
@@ -21,11 +26,17 @@ def create_error_middleware(override: dict[int, str]):
             if code:
                 return await code(request)
             raise
-        except Exception:
+        except Exception as e:
             request.protocol.logger.exception('Error handling exception')
             return await override[500](request)
 
     return error_middleware
+
+
+# def get_token(request: web.Request) -> str:
+#     return jwt.encode(
+#         {"user": request.content}
+#     )
 
 
 def setup_middleware(app: web.Application) -> None:
@@ -34,3 +45,8 @@ def setup_middleware(app: web.Application) -> None:
         500: handle_500
     })
     app.middlewares.append(error_middleware)
+    # app.middlewares.append(JWTMiddleware(
+    #     secret_or_pub_key=secret,
+    #     request_property="user",
+    #     token_getter=get_token
+    # ))
